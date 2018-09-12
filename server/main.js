@@ -1,9 +1,18 @@
-
-import {Meteor} from 'meteor/meteor';
+import {
+    Meteor
+} from 'meteor/meteor';
+import {
+    Posts
+} from '../imports/api/posts/posts.js';
 
 import '/imports/startup/server';
 
-import {Posts} from '../imports/api/posts/posts.js';
+/**
+ * Due to limitations create by the meteor Google login library; everytime the server starts,
+ * it is required to remove and insert the google login service config from the mongo database.
+ * After re-configuring the login, the schedule announcement api is called to ensure all approved
+ * posts are scheduled for publishing as the chron system is not continued after a server shutdown.
+ */
 
 Meteor.startup(() => {
     Accounts.loginServiceConfiguration.remove({
@@ -11,32 +20,18 @@ Meteor.startup(() => {
     });
     Accounts.loginServiceConfiguration.insert({
         service: "google",
-        clientId: "152156454960-h8olc9vhu7juk77p71et1aekkr6qslm1.apps.googleusercontent.com",
-        secret: "nL2ZzKMfrfwja7VHa9jmlhvU"
+        clientId: "MASKED_DUE_TO_PUBLIC_REPO",
+        secret: "MASKED_DUE_TO_PUBLIC_REPO"
     });
-//on server restart, always re-run scheduler to reschedule all announcements
-//TODO
-    Posts.find({'meta.approved': true, 'meta.screeningStage': 3}).forEach(function (obj) {
+    //on server restart, always re-run scheduler to reschedule all announcements
+    Posts.find({
+        'meta.approved': true,
+        'meta.screeningStage': 3
+    }).forEach(function (obj) {
         Meteor.call('scheduleAnnouncement', obj._id, function (err) {
             if (err) {
                 console.log(err);
             }
         });
     });
-    /*
-    Meteor.call('posts.getApprovedPosts', function(err, data) {
-    console.log("getting approved posts");
-    if (err) {
-    console.log (err);
-    } else {
-    //console.log(data);
-    data.forEach(function(obj) {
-    Meteor.call('scheduleAnnouncement', obj._id, function(err, res) {
-    if (err) {
-    console.log(err);
-    }
-    });
-    });
-    }
-    })*/
 });

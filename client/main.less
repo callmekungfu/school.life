@@ -1,6 +1,6 @@
 /*! =========================================================
  *
- uhs.life - V2.0.0
+ school.life - V2.0.0
 *
 * =========================================================
 *
@@ -37,6 +37,8 @@
   Only global level styling exists in this file, if the styling only exists for a page or component,
   import via ui/stylingsheet folder.
 */
+
+// All component stylingsheets import as well as fonts import.
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
@@ -61,11 +63,14 @@
 @import '{}/imports/ui/stylingsheets/seating.less';
 @import '{}/imports/ui/stylingsheets/adminNav.less';
 @import '{}/imports/ui/stylingsheets/animate.less';
+
+// Less variables used for global styles
 @light-grey: rgb(236, 235, 234);
 @primary: #11998e;
 @primary-dark: #00796B;
 @primary-really-dark: #004D40;
 @primary-gradient: linear-gradient(to right, #11998e, #38ef7d);
+
 *{
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;

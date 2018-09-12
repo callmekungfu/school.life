@@ -1,11 +1,10 @@
 /**
- * Created by Yonglin Wang on 7/28/2017.
+ * This file manages the interfacing of all client layouts and pages.
  *
- * This file manages the importing of all layouts and pages.
- *
+ * Author: Yonglin Wang on 7/28/2017.
  */
 
-//import ui files
+// import ui files
 import '../../ui/layouts/applicationLayout.js';
 import '../../ui/components/navigation.js';
 import '../../ui/pages/login.js';
@@ -24,13 +23,13 @@ import '../../ui/pages/experimental.js';
 import '../../ui/pages/bookingAdmin.js';
 import '../../ui/pages/showCheckout.js';
 
-//This file defines functions to post and setup the facebook API
+// This file defines functions to post and setup the facebook API
 import './facebook.js';
-//This file contains the search function used for Algolia
+// This file contains the search function used for Algolia
 import './algoliaSearch.js';
-//This file contains the search all function used for Algolia
+// This file contains the search all function used for Algolia
 import './algoliaAll.js';
-//This file contains push notification setup
+// This file contains push notification setup
 import './push.js';
 
 import '../../api/images/images.js';

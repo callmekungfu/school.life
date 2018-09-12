@@ -2,7 +2,7 @@ import Mailchimp from 'mailchimp-api-v3';
 
 //const Mailchimp = require('mailchimp-api-v3')
 
-const mailchimp = new Mailchimp('c63e149751b5b34657fc48286f336650-us16');
+const mailchimp = new Mailchimp('MASKED_API_KEY');
 
 Meteor.methods({
    'getSubscribers' : function() {
