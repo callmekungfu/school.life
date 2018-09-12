@@ -1,9 +1,8 @@
 /**
- * This file defines all the routing that takes place
- *
+ * This file provides definitions for client layout routing. 
  * */
 
-let loggedIn = FlowRouter.group({
+const loggedIn = FlowRouter.group({
     triggersEnter: [
         function () {
             let route;
@@ -282,7 +281,7 @@ loggedIn.route( '/big-picture', {
         Session.set('DocumentTitle', 'Big Picture Mode | uhs.life');
         BlazeLayout.render('applicationLayout', {main: 'bigPicture'});
     },
-    name: 'bigPicture' // Optional route name.
+    name: 'bigPicture'
 });
 
 loggedIn.route( '/', {
@@ -290,7 +289,7 @@ loggedIn.route( '/', {
         Session.set("DocumentTitle", "Stream | uhs.life");
         BlazeLayout.render('applicationLayout', {main: 'stream'});
     },
-    name: 'root' // Optional route name.
+    name: 'root' 
 });
 
 loggedIn.route( '/stream', {
@@ -298,7 +297,7 @@ loggedIn.route( '/stream', {
         Session.set("DocumentTitle", "Stream | uhs.life");
         BlazeLayout.render('applicationLayout', {main: 'stream'});
     },
-    name: 'stream' // Optional route name.
+    name: 'stream' 
 });
 
 loggedIn.route('/logout',{

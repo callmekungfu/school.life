@@ -1,8 +1,36 @@
 /**
- * Created by Yonglin Wang on 8/4/2017.
+ * This script defines the behaviors and attributes of the editor module used in the application
+ * and interfaces the several components of the editor.
+ * 
+ * The editor is powered by several libraries including but not limited to Froala, Ostrio/files, 
+ * and Dropzone. The editor connects users with the server intuitively by making async method
+ * calls.
+ * 
+ * Some features of this module includes:
+ *      - WYSIWYG HTML Editor
+ *      - S3 storage image upload function
+ *      - Post tagging
+ *      - Categories
+ *      - Unsplash integration
+ *      - Smart Select
+ * 
+ * However this module also contains numerous flaws and limitations, including but not limited to
+ *      - Buggy user interface (back button)
+ *      - Severely complex
+ *      - Slow and irresponsible
+ *      - Too many dependencies
+ *      - DOM and jQuery reliant
+ *      - Long and complicated code-base
+ * 
+ * Author: Yong Lin Wang
+ * Created: 8/4/2017.
  */
-import { FilesCollection } from 'meteor/ostrio:files';
-import { Images } from "../../api/images/images.js";
+import {
+    FilesCollection
+} from 'meteor/ostrio:files';
+import {
+    Images
+} from "../../api/images/images.js";
 
 import './editor.html';
 import './editorComponents/videoAnnouncement.js';
@@ -36,18 +64,18 @@ Template.blogDraft.onRendered(function () {
 Template.blogEditor.onRendered(function () {
     Tracker.autorun(function () {
         let categorySub = Meteor.subscribe('blogCategories');
-        let courseSub = Meteor.subscribe('allCourses',1000);
-        let clubSub = Meteor.subscribe('allClubs',1000);
-        if(categorySub.ready()){
+        let courseSub = Meteor.subscribe('allCourses', 1000);
+        let clubSub = Meteor.subscribe('allClubs', 1000);
+        if (categorySub.ready()) {
             let categories = BlogCategories.find({});
             categories.observeChanges({
-                added: function(id, fields) {
+                added: function (id, fields) {
                     let newCat = new Option(fields.name, fields.name);
                     $('#blogCategorySelect').append(newCat);
                 }
             });
         }
-        if(courseSub.ready() && clubSub.ready()){
+        if (courseSub.ready() && clubSub.ready()) {
             let courses = Courses.find({});
             let clubs = Clubs.find({});
             courses.observeChanges({
@@ -72,9 +100,6 @@ Template.blogEditor.onRendered(function () {
         $('.input-date').datepicker({
             startDate: '+0d'
         });
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-            $(".select2-search__field").attr("readonly", true);
-        }
         let $editor = $('.editable');
         $editor.froalaEditor({
             scaytAutoload: false,
@@ -154,20 +179,20 @@ Template.blogEditor.onRendered(function () {
 Template.announcementEditor.onRendered(function () {
     Tracker.autorun(function () {
         let categorySub = Meteor.subscribe('categories');
-        let clubSub = Meteor.subscribe('allClubs',100);
-        if(categorySub.ready()){
+        let clubSub = Meteor.subscribe('allClubs', 100);
+        if (categorySub.ready()) {
             let categories = Categories.find({});
             categories.observeChanges({
-                added: function(id, fields) {
+                added: function (id, fields) {
                     let newCat = new Option(fields.name, fields.name);
                     $('.announcement-category').append(newCat);
                 }
             });
         }
-        if(clubSub.ready()){
+        if (clubSub.ready()) {
             let clubs = Clubs.find({});
             clubs.observeChanges({
-                added: function(id, fields) {
+                added: function (id, fields) {
                     let newCat = new Option(fields.name, fields.name);
                     $('.clubs-category').append(newCat);
                 }
@@ -179,9 +204,6 @@ Template.announcementEditor.onRendered(function () {
         $('.input-daterange').datepicker({
             startDate: '+0d'
         });
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-            $(".select2-search__field").attr("readonly", true);
-        }
         if (Meteor.isClient) {
             let arrayOfImageIds = [];
             Dropzone.autoDiscover = false;
@@ -222,20 +244,20 @@ Template.announcementOptions.onRendered(function () {
 });
 
 Template.announcementOptions.events({
-    'click input': function(evt){
+    'click input': function (evt) {
         console.log(evt);
     }
 });
 
 Template.editor.helpers({
     'canEdit': function () {
-        return Roles.userIsInRole(Meteor.userId(),['teacher','blogEditor','announcementEditor','admin']);
+        return Roles.userIsInRole(Meteor.userId(), ['teacher', 'blogEditor', 'announcementEditor', 'admin']);
     },
     'canWriteAnnounce': function () {
-        return Roles.userIsInRole(Meteor.userId(),['teacher','admin','announcementEditor']);
+        return Roles.userIsInRole(Meteor.userId(), ['teacher', 'admin', 'announcementEditor']);
     },
     'canWriteBlog': function () {
-        return Roles.userIsInRole(Meteor.userId(),['teacher','admin','blogEditor']);
+        return Roles.userIsInRole(Meteor.userId(), ['teacher', 'admin', 'blogEditor']);
     }
 });
 
@@ -247,13 +269,14 @@ Template.blogDraft.helpers({
         return moment(this.draftedDate).format('MMMM Do YYYY');
     },
     'imageLink': function () {
-        if(this.unsplash){
+        if (this.unsplash) {
             return this.unsplash.urls.full;
-        }else{
-            try{
-                return Images.findOne({_id: this.imgId}).link();
-            }catch(e){
-            }
+        } else {
+            try {
+                return Images.findOne({
+                    _id: this.imgId
+                }).link();
+            } catch (e) {}
         }
     },
     'isBlog': function () {
@@ -271,13 +294,14 @@ Template.allPosts.helpers({
         return moment(this.draftedDate).format('MMMM Do YYYY');
     },
     'imageLink': function () {
-        if(this.unsplash){
+        if (this.unsplash) {
             return this.unsplash.urls.full;
-        }else{
-            try{
-                return Images.findOne({_id: this.imgId}).link();
-            }catch(e){
-            }
+        } else {
+            try {
+                return Images.findOne({
+                    _id: this.imgId
+                }).link();
+            } catch (e) {}
         }
     },
     'isBlog': function () {
@@ -288,15 +312,15 @@ Template.allPosts.helpers({
     },
     'stageCaption': function () {
         let text = 'Post Submitted';
-        if(this.meta.screeningStage === 3){
+        if (this.meta.screeningStage === 3) {
             text = "Post Approved";
-        }else if(this.meta.screeningStage === -1){
+        } else if (this.meta.screeningStage === -1) {
             text = "Post Rejected";
         }
         return text;
     },
     'isRejected': function () {
-        if(this.meta.screeningStage === -1){
+        if (this.meta.screeningStage === -1) {
             return "rejected";
         }
         return "";
@@ -414,23 +438,25 @@ Template.allPosts.events({
         allPosts.loadNextPage();
     },
     'click .draft-item': function (evt) {
-        if(!$(evt.target).hasClass('btn-delete-post') && !$(evt.target).hasClass('btn-republish-post') && !$(evt.target).hasClass('dropbtn')){
+        if (!$(evt.target).hasClass('btn-delete-post') && !$(evt.target).hasClass('btn-republish-post') && !$(evt.target).hasClass('dropbtn')) {
             let obj = $(evt.target).closest($('.draft-item'));
             let id = obj.attr('id');
-            Session.set('reEdit',true);
-            setEditorContentAll(Posts.findOne({_id: id}));
+            Session.set('reEdit', true);
+            setEditorContentAll(Posts.findOne({
+                _id: id
+            }));
         }
     },
     'click .btn-delete-post': function (evt) {
         evt.preventDefault();
         let obj = $(evt.target).closest($('.draft-item'));
         let id = obj.attr('id');
-        alertConfirm('Are you sure','This action cannot be reverted, if you don\'t want this post to show up in the list, we recommend you archive it.', function (accepted) {
-            if(accepted){
+        alertConfirm('Are you sure', 'This action cannot be reverted, if you don\'t want this post to show up in the list, we recommend you archive it.', function (accepted) {
+            if (accepted) {
                 Meteor.call('posts.removePost', id, function (err) {
-                    if(err){
-                        alertError("Error Removing Post", "Please try again later.\n"+ err.message);
-                    }else{
+                    if (err) {
+                        alertError("Error Removing Post", "Please try again later.\n" + err.message);
+                    } else {
                         alertSuccess("Successfully Removed Post", "");
                     }
                 });
@@ -441,20 +467,22 @@ Template.allPosts.events({
         evt.preventDefault();
         let obj = $(evt.target).closest($('.draft-item'));
         let id = obj.attr('id');
-        Modal.show('republishTime', {id: id});
+        Modal.show('republishTime', {
+            id: id
+        });
     }
 });
 Template.republishTime.events({
     'submit #republishForm': function (evt) {
         evt.preventDefault();
-        Meteor.call('posts.updatePost',this.id, {
+        Meteor.call('posts.updatePost', this.id, {
             'meta.approved': false,
             'meta.screeningStage': 0,
             'startDate': new Date($('#republishStart').val()),
             'endDate': new Date($('#republishEnd').val()),
             'meta.rejectedReason': ""
         }, function (err) {
-            if(err){
+            if (err) {
                 alertError("Error occurred When Republishing Post", err.message);
             }
         });
@@ -468,8 +496,8 @@ Template.blogEditor.events({
                 alertError('Post Failed!', err.message);
             } else {
                 alertSuccess('Success!', 'The post has been submitted.');
-                if(Session.get('draftEditItem')) {
-                    Meteor.call('drafts.remove',Session.get('draftEditItem'));
+                if (Session.get('draftEditItem')) {
+                    Meteor.call('drafts.remove', Session.get('draftEditItem'));
                 }
                 Session.set('draftEditItem', null);
                 wipeEditor('blog');
@@ -486,17 +514,17 @@ Template.blogEditor.events({
             }
         });
     },
-    'click .save-draft' : function() {
+    'click .save-draft': function () {
         let json = constructBlogJson();
-        if(Session.get('draftEditItem')){
+        if (Session.get('draftEditItem')) {
             Meteor.call('drafts.updateDraft', Session.get('draftEditItem'), json, function (err) {
-                if(err){
+                if (err) {
                     alertError('Saving Draft Failed!', err.message);
-                }else{
-                    alertSuccess("Saved!","");
+                } else {
+                    alertSuccess("Saved!", "");
                 }
             });
-        }else{
+        } else {
             Meteor.call('drafts.postDraftBlog', json, function (err) {
                 if (err) {
                     alertError('Saving Draft Failed!', err.message);
@@ -515,18 +543,18 @@ Template.blogEditor.events({
             } else {
                 let list = getKeyWord($('.editable').froalaEditor('html.get'));
                 let agent = 0;
-                let getImg = function(){
+                let getImg = function () {
                     Meteor.call('searchKeyword', list[agent], function (err, data) {
                         if (err) {
                             console.log(err);
                             $('#unsplashPrompt').html("Sorry... We failed to find an image for you. Please upload one.");
                             hasUnsplash = false;
                         } else {
-                            if(data.results.length <= 0){
+                            if (data.results.length <= 0) {
                                 agent++;
-                                if(agent <= list.length){
+                                if (agent <= list.length) {
                                     getImg();
-                                }else{
+                                } else {
                                     $('#unsplashPrompt').html("<i class='fa fa-spinner fa-pulse fa-fw'></i> Please Wait...");
                                     Meteor.call('getRandomPhoto', function (err, data) {
                                         if (err) {
@@ -535,24 +563,24 @@ Template.blogEditor.events({
                                             hasUnsplash = false;
                                         } else {
                                             Session.set('unsplash_img', data.id);
-                                            Session.set('unsplashData',data);
+                                            Session.set('unsplashData', data);
                                             blogDrop.disable();
                                             $('#dropzone').fadeOut('fast');
                                             $('#dropzone').after("<img src='" + data.urls.regular + "' class='img-responsive unsplash-container' id='unsplashPreview'/>");
                                             $("#unsplashPreview").hide().fadeIn('slow');
-                                            $('#unsplashPrompt').html("Here you go! This image is by <a href='"+ data.user.links.html +"?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>"+ data.user.name +"</a> from "+ data.user.location +" via <b>Unsplash</b>. <br><br> Want a differnt one? <a href='' id='newUnsplash'>Click Here</a>. Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
+                                            $('#unsplashPrompt').html("Here you go! This image is by <a href='" + data.user.links.html + "?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>" + data.user.name + "</a> from " + data.user.location + " via <b>Unsplash</b>. <br><br> Want a differnt one? <a href='' id='newUnsplash'>Click Here</a>. Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
                                         }
                                     });
                                 }
-                            }else{
-                                let num = getRandomInt(0, data.results.length-1);
+                            } else {
+                                let num = getRandomInt(0, data.results.length - 1);
                                 Session.set('unsplash_img', data.results[num].id);
-                                Session.set('unsplashData',data.results[num]);
+                                Session.set('unsplashData', data.results[num]);
                                 hasUnsplash = true;
                                 $('#dropzone').fadeOut('fast');
                                 $('#dropzone').after("<img src='" + data.results[num].urls.regular + "' class='img-responsive unsplash-container' id='unsplashPreview'/>");
                                 $("#unsplashPreview").hide().fadeIn('slow');
-                                $('#unsplashPrompt').html("Here you go! This image is by <a href='"+ data.results[num].user.links.html +"?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>"+ data.results[num].user.name +"</a> from "+ data.results[num].user.location +" via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
+                                $('#unsplashPrompt').html("Here you go! This image is by <a href='" + data.results[num].user.links.html + "?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>" + data.results[num].user.name + "</a> from " + data.results[num].user.location + " via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
                             }
 
                         }
@@ -574,12 +602,12 @@ Template.blogEditor.events({
                 hasUnsplash = false;
             } else {
                 Session.set('unsplash_img', data.id);
-                Session.set('unsplashData',data);
+                Session.set('unsplashData', data);
                 // Adding Preview
                 $('#unsplashPreview').fadeOut('fast');
                 $('#unsplashPreview').replaceWith("<img src='" + data.urls.regular + "' class='img-responsive unsplash-container' id='unsplashPreview'/>");
                 $("#unsplashPreview").fadeIn('slow');
-                $('#unsplashPrompt').html("Here you go! This image is by <a href='"+ data.user.links.html +"?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>"+ data.user.name +"</a> from "+ data.user.location +" via <b>Unsplash</b>. <br><br> Want a differnt one? <a href='' id='newUnsplash'>Click Here</a>. Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
+                $('#unsplashPrompt').html("Here you go! This image is by <a href='" + data.user.links.html + "?utm_source=uhs.life&utm_medium=referral&utm_campaign=api-credit'>" + data.user.name + "</a> from " + data.user.location + " via <b>Unsplash</b>. <br><br> Want a differnt one? <a href='' id='newUnsplash'>Click Here</a>. Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
             }
         });
     },
@@ -620,10 +648,10 @@ Template.announcementOptions.events({
                 } else {
                     alertSuccess('Success!', 'The post has been submitted.');
                     if (Session.get('draftEditItem')) {
-                        Meteor.call('drafts.remove',Session.get('draftEditItem'));
+                        Meteor.call('drafts.remove', Session.get('draftEditItem'));
                     }
                     Session.set('draftEditItem', null);
-                    wipeEditor('announcement','imageOnly');
+                    wipeEditor('announcement', 'imageOnly');
                     if (operationStack.length - 2 === 0) {
                         swapElements('.editor-main', '.editor-open');
                         $('html, body').css({
@@ -643,10 +671,10 @@ Template.announcementOptions.events({
                 } else {
                     alertSuccess('Success!', 'The post has been submitted.');
                     if (Session.get('draftEditItem')) {
-                        Meteor.call('drafts.remove',Session.get('draftEditItem'));
+                        Meteor.call('drafts.remove', Session.get('draftEditItem'));
                     }
                     Session.set('draftEditItem', null);
-                    wipeEditor('announcement','textOnly');
+                    wipeEditor('announcement', 'textOnly');
                     if (operationStack.length - 2 === 0) {
                         swapElements('.editor-main', '.editor-open');
                         $('html, body').css({
@@ -665,10 +693,10 @@ Template.announcementOptions.events({
                 } else {
                     alertSuccess('Success!', 'The post has been submitted.');
                     if (Session.get('draftEditItem')) {
-                        Meteor.call('drafts.remove',Session.get('draftEditItem'));
+                        Meteor.call('drafts.remove', Session.get('draftEditItem'));
                     }
                     Session.set('draftEditItem', null);
-                    wipeEditor('announcement','imageText');
+                    wipeEditor('announcement', 'imageText');
                     if (operationStack.length - 2 === 0) {
                         swapElements('.editor-main', '.editor-open');
                         $('html, body').css({
@@ -688,10 +716,10 @@ Template.announcementOptions.events({
                 } else {
                     alertSuccess('Success!', 'The post has been submitted.');
                     if (Session.get('draftEditItem')) {
-                        Meteor.call('drafts.remove',Session.get('draftEditItem'));
+                        Meteor.call('drafts.remove', Session.get('draftEditItem'));
                     }
                     Session.set('draftEditItem', null);
-                    wipeEditor('announcement','video');
+                    wipeEditor('announcement', 'video');
                     if (operationStack.length - 2 === 0) {
                         swapElements('.editor-main', '.editor-open');
                         $('html, body').css({
@@ -706,16 +734,16 @@ Template.announcementOptions.events({
         }
 
     },
-    'click .btn-save': function() {
+    'click .btn-save': function () {
         let type = Session.get('announcementType');
         let json = constructAnnouncementJson(type);
 
-        if(Session.get('draftEditItem')){
+        if (Session.get('draftEditItem')) {
             Meteor.call('drafts.updateDraft', Session.get('draftEditItem'), json, function (err) {
-                if(err){
+                if (err) {
                     alertError('Failed to save draft', err.message);
-                }else{
-                    alertSuccess("Saved!","");
+                } else {
+                    alertSuccess("Saved!", "");
                     if (operationStack.length - 2 === 0) {
                         swapElements('.editor-main', '.editor-open');
                         $('html, body').css({
@@ -727,14 +755,14 @@ Template.announcementOptions.events({
                     operationStack.pop();
                 }
             });
-        }else{
+        } else {
             if (type === "imageOnly") {
                 Meteor.call('drafts.postDraftImage', json, function (err) {
                     if (err) {
                         alertError('Saving Draft Failed!', err.message);
                     } else {
                         alertSuccess('Success!', 'The draft has been saved.');
-                        wipeEditor('announcement','imageOnly');
+                        wipeEditor('announcement', 'imageOnly');
                         if (operationStack.length - 2 === 0) {
                             swapElements('.editor-main', '.editor-open');
                             $('html, body').css({
@@ -753,7 +781,7 @@ Template.announcementOptions.events({
                         alertError('Saving Draft Failed!', err.message);
                     } else {
                         alertSuccess('Success!', 'The draft has been saved.');
-                        wipeEditor('announcement','textOnly');
+                        wipeEditor('announcement', 'textOnly');
                         if (operationStack.length - 2 === 0) {
                             swapElements('.editor-main', '.editor-open');
                             $('html, body').css({
@@ -771,7 +799,7 @@ Template.announcementOptions.events({
                         alertError('Saving Draft Failed!', err.message);
                     } else {
                         alertSuccess('Success!', 'The draft has been saved.');
-                        wipeEditor('announcement','imageText');
+                        wipeEditor('announcement', 'imageText');
                         if (operationStack.length - 2 === 0) {
                             swapElements('.editor-main', '.editor-open');
                             $('html, body').css({
@@ -789,7 +817,7 @@ Template.announcementOptions.events({
                         alertError('Saving Draft Failed!', err.message);
                     } else {
                         alertSuccess('Success!', 'The draft has been saved.');
-                        wipeEditor('announcement','video');
+                        wipeEditor('announcement', 'video');
                         if (operationStack.length - 2 === 0) {
                             swapElements('.editor-main', '.editor-open');
                             $('html, body').css({
@@ -811,7 +839,7 @@ Template.blogDraft.events({
         let obj = $(evt.target).closest($('.draft-item'));
         let id = obj.attr('id');
         Meteor.call('drafts.remove', id, function (err) {
-            if(err){
+            if (err) {
                 alertError("Something went wrong when deleting the draft", err.message);
             }
         });
@@ -820,7 +848,9 @@ Template.blogDraft.events({
         evt.preventDefault();
         let obj = $(evt.target).closest($('.draft-item'));
         let id = obj.attr('id');
-        const json = Drafts.findOne({_id: id});
+        const json = Drafts.findOne({
+            _id: id
+        });
         let type = json.type;
         if (type === "imageOnly") {
             Meteor.call('posts.postImage', json, function (err) {
@@ -850,7 +880,7 @@ Template.blogDraft.events({
                     Meteor.call('drafts.remove', id);
                 }
             });
-        } else if (type === 'blog'){
+        } else if (type === 'blog') {
             Meteor.call('posts.postBlog', json, function (err) {
                 if (err) {
                     alertError('Post Failed!', err.message);
@@ -864,9 +894,11 @@ Template.blogDraft.events({
     'click .btn-publish-draft': function (evt) {
         let obj = $(evt.target).closest($('.draft-item'));
         let id = obj.attr('id');
-        let json = Drafts.findOne({_id: id});
+        let json = Drafts.findOne({
+            _id: id
+        });
         let type = json.subType;
-        if(json.type === 'blog'){
+        if (json.type === 'blog') {
             Meteor.call('posts.postBlog', json, function (err) {
                 if (err) {
                     alertError('Post Failed!', err.message);
@@ -875,7 +907,7 @@ Template.blogDraft.events({
                     Meteor.call('drafts.remove', id);
                 }
             });
-        }else{
+        } else {
             if (type === "imageOnly") {
                 Meteor.call('posts.postImage', json, function (err) {
                     if (err) {
@@ -908,11 +940,13 @@ Template.blogDraft.events({
         }
     },
     'click .draft-item': function (evt) {
-        if(!$(evt.target).hasClass('btn-delete-draft') && !$(evt.target).hasClass('btn-publish-draft') && !$(evt.target).hasClass('dropbtn')){
+        if (!$(evt.target).hasClass('btn-delete-draft') && !$(evt.target).hasClass('btn-publish-draft') && !$(evt.target).hasClass('dropbtn')) {
             let obj = $(evt.target).closest($('.draft-item'));
             let id = obj.attr('id');
             Session.set('draftEditItem', id);
-            setEditorContent(Drafts.findOne({_id: id}));
+            setEditorContent(Drafts.findOne({
+                _id: id
+            }));
         }
     }
 });

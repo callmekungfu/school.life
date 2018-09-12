@@ -1,10 +1,15 @@
 /**
- * Created by Yonglin Wang on 12/1/2017.
- *
- * This file contains all the methods used in uhs.life editor
+ * This file contains all the event functions called in uhs.life editor
+ * 
+ * Author: Yong Lin Wang
+ * Created: 12/1/2017.
  */
-import { FilesCollection } from 'meteor/ostrio:files';
-import { Images } from "../../../api/images/images.js";
+import {
+    FilesCollection
+} from 'meteor/ostrio:files';
+import {
+    Images
+} from "../../../api/images/images.js";
 initDropZone = function (id, info) {
     return new Dropzone("form#" + id, {
         maxFiles: info.number || 1,
@@ -45,18 +50,18 @@ getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 setEditorContent = function (json) {
-    if(json.type === 'blog'){
+    if (json.type === 'blog') {
         $('#blogTitle').val(json.title);
         $('#blogSubTitle').val(json.subtitle);
         $('.editable').froalaEditor('html.set', json.content);
-        _.forEach(json.tags,function (item) {
+        _.forEach(json.tags, function (item) {
             $('.tags').tagsinput('add', item);
         });
         $('.visibility-select').val(json.meta.visibility).trigger("change");
         $(".category-select").val(json.categories).trigger("change");
         $("#blogOrganizationSelect").val(json.organizationsValues).trigger("change");
         $('.input-date').datepicker('update', json.releaseDate);
-        if(json.unsplash){
+        if (json.unsplash) {
             Meteor.call('setupUnsplash', function (err) {
                 if (err) {
                     console.log(err);
@@ -68,10 +73,10 @@ setEditorContent = function (json) {
                             $('#unsplashPrompt').html("Sorry... We failed to find an image for you. Please upload one.");
                         } else {
                             Session.set('unsplash_img', data.id);
-                            Session.set('unsplashData',data);
+                            Session.set('unsplashData', data);
                             hasUnsplash = true;
                             $('#dropzone').replaceWith("<img src='" + data.urls.regular + "' class='img-responsive unsplash-container'/>");
-                            $('#unsplashPrompt').html("Here you go! This image is by <a href='"+ data.user.links.html +"'>"+ data.user.name +"</a> from "+ data.user.location +" via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
+                            $('#unsplashPrompt').html("Here you go! This image is by <a href='" + data.user.links.html + "'>" + data.user.name + "</a> from " + data.user.location + " via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
                         }
                     });
                 }
@@ -80,68 +85,69 @@ setEditorContent = function (json) {
         swapElements('.blog-drafts', '.blog-editor');
         operationStack.push('.blog-editor');
         Session.set('announcementType', 'blog');
-    }else if(json.type === 'announcement'){
-        if(json.subType === 'imageOnly'){
+    } else if (json.type === 'announcement') {
+        if (json.subType === 'imageOnly') {
             $('#imageOnlyHeadline').val(json.headline);
-            if(json.imgId){
+            if (json.imgId) {
                 Session.set('newImageId', json.imgId);
                 $('.quick-image-prompt').html('You have already uploaded an image, if you would like to change it, simply add a different one. Otherwise, simply ignore the box.');
             }
-            _.forEach(json.tags,function (item) {
+            _.forEach(json.tags, function (item) {
                 $('.announce-tags:eq(0)').tagsinput('add', item);
             });
             $(".announcement-category:eq(0)").val(json.categories).trigger("change");
             $(".clubs-category:eq(0)").val(json.clubs).trigger("change");
-            $('.startDate:eq(0)').datepicker('update',json.startDate);
-            $('.endDate:eq(0)').datepicker('update',json.endDate);
+            $('.startDate:eq(0)').datepicker('update', json.startDate);
+            $('.endDate:eq(0)').datepicker('update', json.endDate);
             swapElements('.blog-drafts', '.image-only');
             operationStack.push('.image-only');
             Session.set('announcementType', 'imageOnly');
-        }else if(json.subType === 'textOnly'){
+        } else if (json.subType === 'textOnly') {
             $('#textOnlyHeadline').val(json.headline);
             $('.announcement-text:eq(0)').val(json.content);
-            _.forEach(json.tags,function (item) {
+            _.forEach(json.tags, function (item) {
                 $('.announce-tags:eq(1)').tagsinput('add', item);
             });
             $(".announcement-category:eq(1)").val(json.categories).trigger("change");
             $(".clubs-category:eq(1)").val(json.clubs).trigger("change");
-            $('.startDate:eq(1)').datepicker('update',json.startDate);
-            $('.endDate:eq(1)').datepicker('update',json.endDate);
+            $('.startDate:eq(1)').datepicker('update', json.startDate);
+            $('.endDate:eq(1)').datepicker('update', json.endDate);
             swapElements('.blog-drafts', '.text-only');
             operationStack.push('.text-only');
             Session.set('announcementType', 'textOnly');
-        }else if(json.subType === 'imageText'){
+        } else if (json.subType === 'imageText') {
             $('#textImageHeadline').val(json.headline);
-            if(json.imgId){
+            if (json.imgId) {
                 Session.set('newImageId', json.imgId);
                 $('.quick-image-prompt').html('You have already uploaded an image, if you would like to change it, simply add a different one. Otherwise, simply ignore the box.');
             }
             $('.announcement-text:eq(1)').val(json.content);
             $(".announcement-category:eq(2)").val(json.categories).trigger("change");
             $(".clubs-category:eq(2)").val(json.clubs).trigger("change");
-            $('.startDate:eq(2)').datepicker('update',json.startDate);
-            $('.endDate:eq(2)').datepicker('update',json.endDate);
+            $('.startDate:eq(2)').datepicker('update', json.startDate);
+            $('.endDate:eq(2)').datepicker('update', json.endDate);
             Session.set('priority', json.meta.priority);
             $('.is-checked').removeClass('is-checked');
-            $(".priority-toggle[data-priority="+ Session.get('priority') +"]").addClass('is-checked');
+            $(".priority-toggle[data-priority=" + Session.get('priority') + "]").addClass('is-checked');
             swapElements('.blog-drafts', '.text-and-image');
             operationStack.push('.text-and-image');
             Session.set('announcementType', 'textAndImage');
+            // Ahhh the nasty code I used to write...
         }
     }
 };
 setEditorContentAll = function (json) {
-    if(json.type === 'blog'){
+    if (json.type === 'blog') {
         $('#blogTitle').val(json.title);
         $('#blogSubTitle').val(json.subtitle);
         $('.editable').froalaEditor('html.set', json.content);
-        _.forEach(json.tags,function (item) {
+        _.forEach(json.tags, function (item) {
             $('.tags').tagsinput('add', item);
         });
         $('.visibility-select').val(json.meta.visibility).trigger("change");
         $(".category-select").val(json.categories).trigger("change");
         $("#blogOrganizationSelect").val(json.organizationsValues).trigger("change");
-        if(json.unsplash){
+        if (json.unsplash) {
             Meteor.call('setupUnsplash', function (err) {
                 if (err) {
                     console.log(err);
@@ -153,10 +159,10 @@ setEditorContentAll = function (json) {
                             $('#unsplashPrompt').html("Sorry... We failed to find an image for you. Please upload one.");
                         } else {
                             Session.set('unsplash_img', data.id);
-                            Session.set('unsplashData',data);
+                            Session.set('unsplashData', data);
                             hasUnsplash = true;
                             $('#dropzone').replaceWith("<img src='" + data.urls.regular + "' class='img-responsive unsplash-container'/>");
-                            $('#unsplashPrompt').html("Here you go! This image is by <a href='"+ data.user.links.html +"'>"+ data.user.name +"</a> from "+ data.user.location +" via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
+                            $('#unsplashPrompt').html("Here you go! This image is by <a href='" + data.user.links.html + "'>" + data.user.name + "</a> from " + data.user.location + " via <b>Unsplash</b>. <br><br> This will be your featured image, if you want another one <a href='' id='newUnsplash'>Click Here</a> Changed your mind? click here to <a href='' id='newUpload'>upload a new image</a>");
                         }
                     });
                 }
@@ -165,14 +171,14 @@ setEditorContentAll = function (json) {
         swapElements('.all-posts', '.blog-editor');
         operationStack.push('.blog-editor');
         Session.set('announcementType', 'blog');
-    }else if(json.type === 'announcement'){
-        if(json.subType === 'imageOnly'){
+    } else if (json.type === 'announcement') {
+        if (json.subType === 'imageOnly') {
             $('#imageOnlyHeadline').val(json.headline);
-            if(json.imgId){
+            if (json.imgId) {
                 Session.set('newImageId', json.imgId);
                 $('.quick-image-prompt').html('You have already uploaded an image, if you would like to change it, simply add a different one. Otherwise, simply ignore the box.');
             }
-            _.forEach(json.tags,function (item) {
+            _.forEach(json.tags, function (item) {
                 $('.announce-tags:eq(0)').tagsinput('add', item);
             });
             $(".announcement-category:eq(0)").val(json.categories).trigger("change");
@@ -180,10 +186,10 @@ setEditorContentAll = function (json) {
             swapElements('.all-posts', '.image-only');
             operationStack.push('.image-only');
             Session.set('announcementType', 'imageOnly');
-        }else if(json.subType === 'textOnly'){
+        } else if (json.subType === 'textOnly') {
             $('#textOnlyHeadline').val(json.headline);
             $('.announcement-text:eq(0)').val(json.content);
-            _.forEach(json.tags,function (item) {
+            _.forEach(json.tags, function (item) {
                 $('.announce-tags:eq(1)').tagsinput('add', item);
             });
             $(".announcement-category:eq(1)").val(json.categories).trigger("change");
@@ -191,9 +197,9 @@ setEditorContentAll = function (json) {
             swapElements('.all-posts', '.text-only');
             operationStack.push('.text-only');
             Session.set('announcementType', 'textOnly');
-        }else if(json.subType === 'imageText'){
+        } else if (json.subType === 'imageText') {
             $('#textImageHeadline').val(json.headline);
-            if(json.imgId){
+            if (json.imgId) {
                 Session.set('newImageId', json.imgId);
                 $('.quick-image-prompt').html('You have already uploaded an image, if you would like to change it, simply add a different one. Otherwise, simply ignore the box.');
             }
@@ -202,15 +208,15 @@ setEditorContentAll = function (json) {
             $(".clubs-category:eq(2)").val(json.clubs).trigger("change");
             Session.set('priority', json.meta.priority);
             $('.is-checked').removeClass('is-checked');
-            $(".priority-toggle[data-priority="+ Session.get('priority') +"]").addClass('is-checked');
+            $(".priority-toggle[data-priority=" + Session.get('priority') + "]").addClass('is-checked');
             swapElements('.all-posts', '.text-and-image');
             operationStack.push('.text-and-image');
             Session.set('announcementType', 'textAndImage');
         }
     }
 };
-wipeEditor = function(type, subType) {
-    if(type === 'blog'){
+wipeEditor = function (type, subType) {
+    if (type === 'blog') {
         $('#blogTitle').val(null);
         $('#blogSubTitle').val(null);
         $('.editable').froalaEditor('html.set', '');
@@ -226,8 +232,8 @@ wipeEditor = function(type, subType) {
         $('#dropzone').show();
         $('.unsplash-container').remove();
         $('#unsplashPrompt').html("Want to avoid the hassle? <a href='' id='getFeaturedUnsplash'>Click here</a> and we will find an image for you!");
-    }else if(type === 'announcement'){
-        if(subType === 'imageOnly'){
+    } else if (type === 'announcement') {
+        if (subType === 'imageOnly') {
             $('#imageOnlyHeadline').val(null);
             Session.set('newImageId', null);
             $('#announcementImage').replaceWith("<form action='/file-upload' class='dropzone' id='announcementImage'></form>");
@@ -240,17 +246,17 @@ wipeEditor = function(type, subType) {
             $('.announce-tags:eq(0)').tagsinput('removeAll');
             $(".announcement-category:eq(0)").val(null).trigger("change");
             $(".clubs-category:eq(0)").val(null).trigger("change");
-            $('.startDate:eq(0)').datepicker('update',null);
-            $('.endDate:eq(0)').datepicker('update',null);
-        }else if(subType === 'textOnly'){
+            $('.startDate:eq(0)').datepicker('update', null);
+            $('.endDate:eq(0)').datepicker('update', null);
+        } else if (subType === 'textOnly') {
             $('#textOnlyHeadline').val(null);
             $('.announcement-text:eq(0)').val(null);
             $('.announce-tags:eq(1)').tagsinput('removeAll');
             $(".announcement-category:eq(1)").val(null).trigger("change");
             $(".clubs-category:eq(1)").val(null).trigger("change");
-            $('.startDate:eq(1)').datepicker('update',null);
-            $('.endDate:eq(1)').datepicker('update',null);
-        }else if(subType === 'imageText'){
+            $('.startDate:eq(1)').datepicker('update', null);
+            $('.endDate:eq(1)').datepicker('update', null);
+        } else if (subType === 'imageText') {
             $('#textImageHeadline').val(null);
             Session.set('newImageId', null);
             $('#announcementImageTwo').replaceWith("<form action='/file-upload' class='dropzone' id='announcementImageTwo'></form>");
@@ -264,12 +270,12 @@ wipeEditor = function(type, subType) {
             $('.announce-tags:eq(2)').tagsinput('removeAll');
             $(".announcement-category:eq(2)").val(null).trigger("change");
             $(".clubs-category:eq(2)").val(null).trigger("change");
-            $('.startDate:eq(2)').datepicker('update',null);
-            $('.endDate:eq(2)').datepicker('update',null);
+            $('.startDate:eq(2)').datepicker('update', null);
+            $('.endDate:eq(2)').datepicker('update', null);
             Session.set('priority', 'image');
             $('.is-checked').removeClass('is-checked');
-            $(".priority-toggle[data-priority="+ Session.get('priority') +"]").addClass('is-checked');
-        }else if(subType === 'video'){
+            $(".priority-toggle[data-priority=" + Session.get('priority') + "]").addClass('is-checked');
+        } else if (subType === 'video') {
             $('#videoHeadline').val(null);
             Session.set('videoId', null);
             $('#videoLink').val(null);
@@ -277,12 +283,12 @@ wipeEditor = function(type, subType) {
             $('.announce-tags:eq(3)').tagsinput('removeAll');
             $(".announcement-category:eq(3)").val(null).trigger("change");
             $(".clubs-category:eq(3)").val(null).trigger("change");
-            $('.startDate:eq(3)').datepicker('update',null);
-            $('.endDate:eq(3)').datepicker('update',null);
+            $('.startDate:eq(3)').datepicker('update', null);
+            $('.endDate:eq(3)').datepicker('update', null);
         }
     }
 };
-constructBlogJson = function(){
+constructBlogJson = function () {
     let title = $('#blogTitle').val();
     let subtitle = $('#blogSubTitle').val();
     let content = $('.editable').froalaEditor('html.get');
@@ -301,7 +307,8 @@ constructBlogJson = function(){
         }
     }
     let orgOptions = document.getElementById('blogOrganizationSelect').options;
-    let orgNames = [], orgVal = [];
+    let orgNames = [],
+        orgVal = [];
     for (let i = 0; i < orgOptions.length; i++) {
         let opt = orgOptions[i];
         if (opt.selected) {
@@ -335,7 +342,7 @@ constructBlogJson = function(){
         }
     };
 };
-constructAnnouncementJson = function(type){
+constructAnnouncementJson = function (type) {
     if (type === "imageOnly") {
         let headline = $('#imageOnlyHeadline').val();
         let imgId = Session.get('newImageId');
@@ -369,7 +376,7 @@ constructAnnouncementJson = function(type){
             //TODO
             alertError('Post Incomplete!', "You haven't added a headline!");
         }
-        if(!startDate || !endDate){
+        if (!startDate || !endDate) {
             alertError('Post Incomplete!', "You haven't added a date!");
         }
         return {
@@ -426,7 +433,7 @@ constructAnnouncementJson = function(type){
             //TODO
             alertError('Post Incomplete!', "You haven't added a headline!");
         }
-        if(!startDate || !endDate){
+        if (!startDate || !endDate) {
             alertError('Post Incomplete!', "You haven't added a date!");
         }
 
@@ -486,7 +493,7 @@ constructAnnouncementJson = function(type){
             //TODO
             alertError('Post Incomplete!', "You haven't added a headline!");
         }
-        if(!startDate || !endDate){
+        if (!startDate || !endDate) {
             alertError('Post Incomplete!', "You haven't added a date!");
         }
         if (!content) {
@@ -513,7 +520,7 @@ constructAnnouncementJson = function(type){
                 visibility: visibility
             }
         };
-    } else if(type === 'video'){
+    } else if (type === 'video') {
         let headline = $('#videoHeadline').val();
         let videoId = Session.get('videoId');
         let separators = [' , ', ', ', ',', ' ,'];
@@ -547,7 +554,7 @@ constructAnnouncementJson = function(type){
             //TODO
             alertError('Post Incomplete!', "You haven't added a headline!");
         }
-        if(!startDate || !endDate){
+        if (!startDate || !endDate) {
             alertError('Post Incomplete!', "You haven't added a date!");
         }
         return {
@@ -569,11 +576,11 @@ constructAnnouncementJson = function(type){
         };
     }
 };
-getKeyWord = function(text) {
+getKeyWord = function (text) {
     let keyword_extractor = require("keyword-extractor");
 
     let keywords = ($(text).text());
-//  Extract the keywords
+    //  Extract the keywords
     return keyword_extractor.extract(keywords, {
         language: "english",
         remove_digits: true,
@@ -582,7 +589,7 @@ getKeyWord = function(text) {
         remove_max_ngrams: 10
     });
 };
-youtubeParser = function(url){
+youtubeParser = function (url) {
     const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     let match = url.match(regExp);
     if (match && match[2].length === 11) {

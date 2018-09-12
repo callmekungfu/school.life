@@ -1,4 +1,12 @@
-//This file provides a library of dialogs that are used in uhs.life
+/** 
+ * This library contains dialogues options used to communicate with users.
+ * 
+ * The alerts are powered by a Meteor library called Bootbox. Boot box library uses Bootstrap
+ * modals as the platform for more intuitive alerts than the default options provided by browsers
+ * 
+ * Author: Yong Lin Wang
+ * Created: 8/8/2017
+ * */
 
 alertError = function (title, body) {
     bootbox.alert({
@@ -34,11 +42,11 @@ alertConfirm = function (title, body, callback) {
         message: "<h3>"+title+"</h3><p>"+ body +"</p>",
         buttons: {
             confirm: {
-                label: 'Yes I am Sure',
+                label: 'Yes I\'m Sure',
                 className: 'btn-success'
             },
             cancel: {
-                label: 'No, I am Not',
+                label: 'No, I\'m Not',
                 className: 'btn-grey'
             }
         },

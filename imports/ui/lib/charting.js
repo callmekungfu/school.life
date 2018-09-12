@@ -1,28 +1,30 @@
-import chart from 'chart.js';
 
-// Chart options
+
+import Chart from 'chart.js';
+
+// Global Chart options
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.tooltips.enabled = true;
-drawChart = function(chartId, mark){
+drawChart = function (chartId, mark) {
     //$( "canvas#"+chartId ).replaceWith( "<canvas id='" + chartId + "'></canvas>" );
     let color;
-    if(mark >= 95){
+    if (mark >= 95) {
         color = "#009688";
-    }else if(mark >= 90){
+    } else if (mark >= 90) {
         color = "#4caf50";
-    }else if(mark >=85){
+    } else if (mark >= 85) {
         color = "#8bc34a";
-    }else if(mark >=80){
+    } else if (mark >= 80) {
         color = "#cddc39";
-    }else if(mark >=75){
+    } else if (mark >= 75) {
         color = "#ffeb3b";
-    }else if(mark >=70){
+    } else if (mark >= 70) {
         color = "#ffc107";
-    }else if(mark >=60){
+    } else if (mark >= 60) {
         color = "#ff9800";
-    }else if(mark >=55){
+    } else if (mark >= 55) {
         color = "#ff5722";
-    }else if(mark < 55){
+    } else if (mark < 55) {
         color = "#f44336";
     }
     let ctx = document.getElementById(chartId).getContext("2d");
@@ -34,24 +36,23 @@ drawChart = function(chartId, mark){
                 "Achievements",
                 "Losts"
             ],
-            datasets: [
-                {
-                    data: [mark, (100-mark).toFixed(1)],
-                    backgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ],
-                    hoverBackgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ]
-                }]
+            datasets: [{
+                data: [mark, (100 - mark).toFixed(1)],
+                backgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ],
+                hoverBackgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ]
+            }]
         }
     });
 }
 
-drawSmallChartSide = function(chartId, mark, color){
-    $( "canvas#"+chartId ).replaceWith( "<canvas id="+chartId+" width='20' height='20'></canvas>" );
+drawSmallChartSide = function (chartId, mark, color) {
+    $("canvas#" + chartId).replaceWith("<canvas id=" + chartId + " width='20' height='20'></canvas>");
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
     //This will get the first returned node in the jQuery collection.
@@ -62,18 +63,17 @@ drawSmallChartSide = function(chartId, mark, color){
                 "Achievements",
                 "Losts"
             ],
-            datasets: [
-                {
-                    data: [mark, (100-mark).toFixed(1)],
-                    backgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ],
-                    hoverBackgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ]
-                }]
+            datasets: [{
+                data: [mark, (100 - mark).toFixed(1)],
+                backgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ],
+                hoverBackgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ]
+            }]
         },
         options: {
             animation: false
@@ -81,8 +81,8 @@ drawSmallChartSide = function(chartId, mark, color){
     });
 }
 
-drawSmallChart = function(chartId, mark, color){
-    $( "canvas#"+chartId ).replaceWith( "<canvas id="+chartId+"></canvas>" );
+drawSmallChart = function (chartId, mark, color) {
+    $("canvas#" + chartId).replaceWith("<canvas id=" + chartId + "></canvas>");
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
     //This will get the first returned node in the jQuery collection.
@@ -93,18 +93,17 @@ drawSmallChart = function(chartId, mark, color){
                 "Achievements",
                 "Losts"
             ],
-            datasets: [
-                {
-                    data: [mark, (100-mark).toFixed(1)],
-                    backgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ],
-                    hoverBackgroundColor: [
-                        color,
-                        "#A9A9A9"
-                    ]
-                }]
+            datasets: [{
+                data: [mark, (100 - mark).toFixed(1)],
+                backgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ],
+                hoverBackgroundColor: [
+                    color,
+                    "#A9A9A9"
+                ]
+            }]
         },
         options: {
             animation: false
@@ -112,37 +111,35 @@ drawSmallChart = function(chartId, mark, color){
     });
 }
 
-drawPolyChart = function(chartId, assignments, marks){
+drawPolyChart = function (chartId, assignments, marks) {
 
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
 
     var data = {
         labels: assignments,
-        datasets: [
-            {
-                label: "M.A.T.A.",
-                fill: true,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 5,
-                pointHitRadius: 10,
-                data: marks,
-                spanGaps: false,
-            }
-        ]
+        datasets: [{
+            label: "M.A.T.A.",
+            fill: true,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 10,
+            data: marks,
+            spanGaps: false,
+        }]
     };
     //This will get the first returned node in the jQuery collection.
     var myChart = new Chart(ctx, {
@@ -165,37 +162,35 @@ drawPolyChart = function(chartId, assignments, marks){
     });
 }
 
-drawPolyChartBetter = function(chartId, labels, values){
-    $( "canvas#"+chartId ).replaceWith( "<canvas id="+chartId+"></canvas>" );
+drawPolyChartBetter = function (chartId, labels, values) {
+    $("canvas#" + chartId).replaceWith("<canvas id=" + chartId + "></canvas>");
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
 
     var data = {
         labels: labels,
-        datasets: [
-            {
-                lable: 'Tickets',
-                fill: false,
-                lineTension: 0,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 5,
-                pointHitRadius: 10,
-                data: values,
-                spanGaps: false,
-            }
-        ]
+        datasets: [{
+            lable: 'Tickets',
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 10,
+            data: values,
+            spanGaps: false,
+        }]
     };
     //This will get the first returned node in the jQuery collection.
     var myChart = new Chart(ctx, {
@@ -230,15 +225,14 @@ drawPolyChartBetter = function(chartId, labels, values){
     });
 }
 
-drawPerformChart = function(chartId, assignments, k, t, c, a){
+drawPerformChart = function (chartId, assignments, k, t, c, a) {
 
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
 
     var data = {
         labels: assignments,
-        datasets: [
-            {
+        datasets: [{
                 label: "Knowledge",
                 fill: false,
                 lineTension: 0.1,
@@ -350,14 +344,14 @@ drawPerformChart = function(chartId, assignments, k, t, c, a){
 }
 
 
-drawHalfChart = function(chartId, mark, total, color){
+drawHalfChart = function (chartId, mark, total, color) {
     var data = {
         labels: [
             "Achievements",
             "Losts"
         ],
         datasets: [{
-            data: [mark, total-mark],
+            data: [mark, total - mark],
             backgroundColor: [
                 color,
                 "#A9A9A9"
@@ -372,7 +366,7 @@ drawHalfChart = function(chartId, mark, total, color){
 
     var ctx = document.getElementById(chartId).getContext("2d");
 
-// And for a doughnut chart
+    // And for a doughnut chart
     var myDoughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: data,
@@ -385,15 +379,15 @@ drawHalfChart = function(chartId, mark, total, color){
     });
 }
 
-drawHalfChartSide = function(chartId, mark, total, color){
-    $( "canvas#"+chartId ).replaceWith( "<canvas id="+chartId+"></canvas>" );
+drawHalfChartSide = function (chartId, mark, total, color) {
+    $("canvas#" + chartId).replaceWith("<canvas id=" + chartId + "></canvas>");
     var data = {
         labels: [
             "Achievements",
             "Losts"
         ],
         datasets: [{
-            data: [mark, total-mark],
+            data: [mark, total - mark],
             backgroundColor: [
                 color,
                 "#A9A9A9"
@@ -407,7 +401,7 @@ drawHalfChartSide = function(chartId, mark, total, color){
 
     var ctx = document.getElementById(chartId).getContext("2d");
 
-// And for a doughnut chart
+    // And for a doughnut chart
     var myDoughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: data,
@@ -420,37 +414,35 @@ drawHalfChartSide = function(chartId, mark, total, color){
     });
 }
 
-drawPolyChartSide = function(chartId, assignments, marks){
-    $( "canvas#"+chartId ).replaceWith( "<canvas id="+chartId+"></canvas>" );
+drawPolyChartSide = function (chartId, assignments, marks) {
+    $("canvas#" + chartId).replaceWith("<canvas id=" + chartId + "></canvas>");
     //Get context with jQuery - using jQuery's .get() method.
     var ctx = document.getElementById(chartId).getContext("2d");
 
     var data = {
         labels: assignments,
-        datasets: [
-            {
-                label: "M.A.T.A.",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 5,
-                pointHitRadius: 10,
-                data: marks,
-                spanGaps: false,
-            }
-        ]
+        datasets: [{
+            label: "M.A.T.A.",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 10,
+            data: marks,
+            spanGaps: false,
+        }]
     };
     //This will get the first returned node in the jQuery collection.
     var myChart = new Chart(ctx, {
