@@ -1,4 +1,4 @@
-### This repository is no longer maintained 
+### This repository is no longer maintained, all third party API keys are disabled
 
 # uhs.life
 A modern and reliable platform for information sharing at Unionville High School.
