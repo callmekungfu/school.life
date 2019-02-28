@@ -1,13 +1,15 @@
-
+/**
+ * This library contains configuration functions for drawing canvas 
+ */
 
 import Chart from 'chart.js';
 
 // Global Chart options
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.tooltips.enabled = true;
+
 drawChart = function (chartId, mark) {
-    //$( "canvas#"+chartId ).replaceWith( "<canvas id='" + chartId + "'></canvas>" );
-    let color;
+    let color = '#000000';
     if (mark >= 95) {
         color = "#009688";
     } else if (mark >= 90) {
@@ -28,13 +30,14 @@ drawChart = function (chartId, mark) {
         color = "#f44336";
     }
     let ctx = document.getElementById(chartId).getContext("2d");
+    
     //This will get the first returned node in the jQuery collection.
     return new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: [
                 "Achievements",
-                "Losts"
+                "Losses"
             ],
             datasets: [{
                 data: [mark, (100 - mark).toFixed(1)],
@@ -61,7 +64,7 @@ drawSmallChartSide = function (chartId, mark, color) {
         data: {
             labels: [
                 "Achievements",
-                "Losts"
+                "Losses"
             ],
             datasets: [{
                 data: [mark, (100 - mark).toFixed(1)],
@@ -91,7 +94,7 @@ drawSmallChart = function (chartId, mark, color) {
         data: {
             labels: [
                 "Achievements",
-                "Losts"
+                "Losses"
             ],
             datasets: [{
                 data: [mark, (100 - mark).toFixed(1)],

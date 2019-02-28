@@ -1,8 +1,18 @@
 /**
- * Created by Yonglin Wang on 9/12/2017.
+ * This script defines the attributes and event behaviors of the blogs page.
+ * 
+ * Blog page is a page with multiple dynamic components that enables displaying
+ * of long formatted content.
+ * 
+ * 
+ * 
+ * Author: Yonglin Wang
+ * Created: 9/12/2017.
  */
 
-import { Images } from '../../api/images/images.js';
+import {
+    Images
+} from '../../api/images/images.js';
 import './blogs.html';
 
 Template.blogs.onCreated(function () {
@@ -32,30 +42,33 @@ Template.blogCategory.helpers({
         return Posts.find({
             'type': 'blog',
             'categories': this.name
-        },{
+        }, {
             limit: 4
         });
     }
 });
 
-Template.blogItem.onRendered(function () {
-});
+Template.blogItem.onRendered(function () {});
 
 Template.blogItem.helpers({
     'imageLink': function () {
-        if(this.unsplash){
+        if (this.unsplash) {
             console.log(this);
             return this.unsplash.urls.full;
-        }else if(this.imgId){
-            try{
-                return Images.findOne({_id: this.imgId}).link();
-            }catch(e){
+        } else if (this.imgId) {
+            try {
+                return Images.findOne({
+                    _id: this.imgId
+                }).link();
+            } catch (e) {
                 //console.log('error getting photo')
             }
         }
     },
     'writer': function () {
-        return Meteor.users.findOne({_id: this.author}).services.google.name;
+        return Meteor.users.findOne({
+            _id: this.author
+        }).services.google.name;
     },
     'date': function () {
         return moment(this.releasedDate).format("MMMM Do YYYY");
@@ -70,9 +83,9 @@ Template.blogItem.helpers({
 });
 
 Template.blogItem.events({
-    'click .blog-item': function (evt,template) {
+    'click .blog-item': function (evt, template) {
         let obj = $(evt.target).closest($('.blog-item'));
         let id = obj.attr('id');
-        FlowRouter.go('/blog/'+id);
+        FlowRouter.go('/blog/' + id);
     }
 });
